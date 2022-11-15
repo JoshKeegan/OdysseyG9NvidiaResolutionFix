@@ -2,6 +2,8 @@
 Adds additional resolutions at 240Hz, with adaptive sync, for the Samsung Odyssey G9 when using an Nvidia GPU. 
 This allows for games to be played at 16:9 and 21:9 aspect ratios.
 
+[![CI](https://github.com/JoshKeegan/OdysseyG9NvidiaResolutionFix/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/JoshKeegan/OdysseyG9NvidiaResolutionFix/actions?query=branch%3Amaster)
+
 ## Usage
 Run with administrative privileges. You will be required to restart your computer before the new resolutions are available.  
 It must be re-run after each GPU driver update (why I wrote this program - doing this manually gets old...).
