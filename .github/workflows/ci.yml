@@ -1,0 +1,30 @@
+name: CI/CD
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  ci:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Go
+        uses: actions/setup-go@v2
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: Restore
+        run: go get
+
+      - name: Build
+        run: go build
+
+      - name: Upload Artefacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build
+          path: "*.exe"
