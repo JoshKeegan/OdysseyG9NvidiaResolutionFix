@@ -40,7 +40,7 @@ func updateModeGroupsAddStandardResolution(modeGroups []string, res string) erro
 		// S	= Standard mode
 		// H 	= Horizontal spanning mode
 		// V	= Vertical spanning mode
-		if strings.HasPrefix(mode, "S ") {
+		if strings.HasPrefix(mode, "S") || strings.HasPrefix(mode, "{*}S") {
 			modeGroups[i] = addStandardResolution(mode, res)
 			return nil
 		}
