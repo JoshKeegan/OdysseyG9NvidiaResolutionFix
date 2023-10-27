@@ -14,7 +14,7 @@ func addResolution(res string) (err error) {
 		return err
 	}
 	defer func() {
-		err = key.Close()
+		err = errors.Join(err, key.Close())
 	}()
 
 	modeGroups, _, err := key.GetStringsValue(nvModesName)
