@@ -2,14 +2,18 @@ package main
 
 import (
 	"errors"
-	"golang.org/x/sys/windows/registry"
 	"strings"
+
+	"golang.org/x/sys/windows/registry"
 )
 
-const nvModesName = "NV_Modes"
+const (
+	nvidiaDriverRegistryKeyBasePath = "SYSTEM\\ControlSet001\\Control\\Class\\{4d36e968-e325-11ce-bfc1-08002be10318}"
+	nvModesName                     = "NV_Modes"
+)
 
 func addResolution(res string) (err error) {
-	key, err := registry.OpenKey(registry.LOCAL_MACHINE, "SYSTEM\\ControlSet001\\Control\\Class\\{4d36e968-e325-11ce-bfc1-08002be10318}\\0000", registry.ALL_ACCESS)
+	key, err := openNvidiaDriverRegistryKey()
 	if err != nil {
 		return err
 	}
@@ -29,6 +33,20 @@ func addResolution(res string) (err error) {
 	// Write back
 	err = key.SetStringsValue(nvModesName, modeGroups)
 	return err
+}
+
+func openNvidiaDriverRegistryKey() (registry.Key, error) {
+	var key registry.Key
+	var err error
+	// Was 0000, but after updating to the latest driver on 2026-11-11, it's become 0001.
+	// Not sure if they'll switch again, so support both.
+	for _, path := range []string{"0000", "0001"} {
+		key, err = registry.OpenKey(registry.LOCAL_MACHINE, nvidiaDriverRegistryKeyBasePath+"\\"+path, registry.ALL_ACCESS)
+		if err == nil {
+			break
+		}
+	}
+	return key, err
 }
 
 // updateModeGroupsAddStandardResolution updates the supplied mode groups, adding a given resolution to the standard ones
